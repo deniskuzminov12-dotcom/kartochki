@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101827">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Клетки">
+  <title>Клетки — Сокобан</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">ГОЛОВОЛОМКА</p>
+        <h1>Клетки</h1>
+      </div>
+      <button class="icon-button" id="resetButton" type="button" aria-label="Начать уровень заново">↻</button>
+    </header>
+
+    <section class="progress-card" aria-label="Прогресс">
+      <div>
+        <span class="muted">Уровень</span>
+        <strong id="levelLabel">1 / 10</strong>
+      </div>
+      <div class="progress-track"><span id="progressBar"></span></div>
+      <div class="moves"><span class="muted">Ходы</span><strong id="movesLabel">0</strong></div>
+    </section>
+
+    <section class="board-wrap">
+      <div id="board" class="board" role="grid" aria-label="Игровое поле"></div>
+    </section>
+
+    <p id="hint" class="hint">Передвинь все ящики на светящиеся клетки</p>
+
+    <section class="controls" aria-label="Управление">
+      <button class="control-button up" data-direction="up" type="button" aria-label="Вверх">▲</button>
+      <div class="horizontal-controls">
+        <button class="control-button" data-direction="left" type="button" aria-label="Влево">◀</button>
+        <button class="control-button" data-direction="down" type="button" aria-label="Вниз">▼</button>
+        <button class="control-button" data-direction="right" type="button" aria-label="Вправо">▶</button>
+      </div>
+    </section>
+
+    <nav class="level-nav" aria-label="Выбор уровня">
+      <button id="previousButton" type="button">← Назад</button>
+      <button id="nextButton" type="button">Следующий →</button>
+    </nav>
+  </main>
+
+  <div id="winDialog" class="dialog-backdrop" hidden>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="winTitle">
+      <div class="trophy">✦</div>
+      <p class="eyebrow">ОТЛИЧНО</p>
+      <h2 id="winTitle">Уровень пройден!</h2>
+      <p>Ты справился за <strong id="winMoves">0</strong> ходов.</p>
+      <button id="continueButton" class="primary-button" type="button">Продолжить</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
