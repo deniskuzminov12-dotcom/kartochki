@@ -1,4 +1,4 @@
-const CACHE = 'kletki-v1';
+const CACHE = 'kletki-v2';
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(['./', './index.html', './style.css', './app.js', './manifest.json', './icon.svg'])));
 });
