@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#101827">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Клетки">
-  <title>Клетки — Сокобан</title>
+  <meta name="apple-mobile-web-app-title" content="Артефакты">
+  <title>Артефакты — карточная коллекция</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
@@ -15,87 +15,23 @@
 <body>
   <main class="app-shell">
     <header class="topbar">
-      <div>
-        <p class="eyebrow">ГОЛОВОЛОМКА</p>
-        <h1>Клетки</h1>
-      </div>
-      <div class="top-actions">
-        <button class="account-button" id="authButton" type="button">Войти</button>
-        <button class="icon-button" id="resetButton" type="button" aria-label="Начать уровень заново">↻</button>
-      </div>
+      <div><p class="eyebrow">КАРТОЧНАЯ КОЛЛЕКЦИЯ</p><h1>Артефакты</h1></div>
+      <button id="authButton" class="account-button" type="button">Войти</button>
     </header>
-
     <p id="authStatus" class="auth-status">Прогресс сохраняется на этом устройстве</p>
-
-    <nav class="game-switcher" aria-label="Выбор игры">
-      <button id="sokobanTab" class="game-tab active" type="button">Клетки</button>
-      <button id="minesTab" class="game-tab" type="button">Сапёр</button>
-    </nav>
-
-    <section id="sokobanGame">
-      <section class="progress-card" aria-label="Прогресс">
-      <div>
-        <span class="muted">Уровень</span>
-        <strong id="levelLabel">1 / 10</strong>
-      </div>
-      <div class="progress-track"><span id="progressBar"></span></div>
-      <div class="moves"><span class="muted">Ходы</span><strong id="movesLabel">0</strong></div>
-      </section>
-
-      <section class="board-wrap">
-        <div id="board" class="board" role="grid" aria-label="Игровое поле"></div>
-      </section>
-
-      <p id="hint" class="hint">Передвинь все ящики на светящиеся клетки</p>
-
-      <section class="controls" aria-label="Управление">
-        <button class="control-button up" data-direction="up" type="button" aria-label="Вверх">▲</button>
-        <div class="horizontal-controls">
-          <button class="control-button" data-direction="left" type="button" aria-label="Влево">◀</button>
-          <button class="control-button" data-direction="down" type="button" aria-label="Вниз">▼</button>
-          <button class="control-button" data-direction="right" type="button" aria-label="Вправо">▶</button>
-        </div>
-      </section>
-
-      <nav class="level-nav" aria-label="Выбор уровня">
-        <button id="previousButton" type="button">← Назад</button>
-        <button id="nextButton" type="button">Следующий →</button>
-      </nav>
+    <section class="stats-card">
+      <div><span class="muted">Собрано</span><strong id="collectionCount">0 / 24</strong></div>
+      <div class="collection-track"><span id="collectionBar"></span></div>
+      <div class="coins"><span class="coin">◆</span><strong id="coinsLabel">100</strong></div>
     </section>
-
-    <section id="minesGame" class="mines-game" hidden>
-      <div class="mines-heading">
-        <div>
-          <p class="eyebrow">МИНИ-ИГРА</p>
-          <h2>Сапёр</h2>
-        </div>
-        <button id="newMinesButton" class="small-button" type="button">Новая игра</button>
-      </div>
-      <div class="mines-stats"><span>Мин: <strong id="minesLeft">10</strong></span><span id="minesMessage">Открой безопасные клетки</span></div>
-      <div id="mineBoard" class="mine-board" role="grid" aria-label="Поле сапёра"></div>
-      <div class="mine-actions">
-        <button id="flagModeButton" class="small-button" type="button">🚩 Режим флажков: выкл.</button>
-      </div>
-      <p class="hint">Нажми на клетку, чтобы открыть. Флажки помогают отметить мины.</p>
+    <section class="case-panel">
+      <div class="case-art"><span>✦</span></div>
+      <div class="case-copy"><p class="eyebrow">СЕЙЧАС ДОСТУПНО</p><h2>Кейс исследователя</h2><p>Открой кейс и найди артефакт. Чем реже карта, тем меньше шанс её получить.</p><button id="openCaseButton" class="primary-button" type="button">Открыть кейс <span class="button-cost">◆ 20</span></button><p id="caseHint" class="case-hint">Первый кейс сегодня — бесплатно</p></div>
     </section>
-
-    <nav class="level-nav" aria-label="Выбор уровня">
-      <button id="previousButton" type="button">← Назад</button>
-      <button id="nextButton" type="button">Следующий →</button>
-    </nav>
+    <section id="revealPanel" class="reveal-panel" hidden><p class="eyebrow">ТВОЯ НАХОДКА</p><div id="revealedCard" class="revealed-card"></div><button id="closeRevealButton" class="small-button" type="button">В коллекцию</button></section>
+    <section class="collection-section"><div class="section-heading"><div><p class="eyebrow">ТВОИ КАРТЫ</p><h2>Коллекция</h2></div><span id="duplicateLabel" class="duplicate-label">Дубликаты: 0</span></div><div class="rarity-tabs" role="tablist"><button class="rarity-tab active" data-filter="all" type="button">Все</button><button class="rarity-tab" data-filter="common" type="button">Обычные</button><button class="rarity-tab" data-filter="rare" type="button">Редкие</button><button class="rarity-tab" data-filter="epic" type="button">Эпические</button><button class="rarity-tab" data-filter="legendary" type="button">Легенды</button></div><div id="collectionGrid" class="collection-grid"></div></section>
   </main>
-
-  <div id="winDialog" class="dialog-backdrop" hidden>
-    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="winTitle">
-      <div class="trophy">✦</div>
-      <p class="eyebrow">ОТЛИЧНО</p>
-      <h2 id="winTitle">Уровень пройден!</h2>
-      <p>Ты справился за <strong id="winMoves">0</strong> ходов.</p>
-      <button id="continueButton" class="primary-button" type="button">Продолжить</button>
-    </div>
-  </div>
-
-  <!-- Эти библиотеки используются только после добавления настроек Firebase в app.js. -->
+  <div id="toast" class="toast" role="status"></div>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>

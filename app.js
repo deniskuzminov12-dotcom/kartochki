@@ -1,250 +1,123 @@
-const LEVELS = [
-  ["#######", "#     #", "# . $ #", "#   @ #", "#######"],
-  ["########", "#  .   #", "#  $   #", "#      #", "#  $ .@#", "#      #", "########"],
-  ["#########", "#   .   #", "# $ # $ #", "#   #   #", "# .   @ #", "#########"],
-  ["#########", "# .     #", "# ###$  #", "#   $ . #", "#  @    #", "#########"],
-  ["##########", "#   .    #", "# $###$  #", "#   @  . #", "#        #", "##########"],
-  ["##########", "# .   .  #", "# $ # $  #", "#   @    #", "#        #", "##########"],
-  ["##########", "#  .     #", "#  ###$  #", "#  $  .  #", "#   @    #", "##########"],
-  ["###########", "# .     . #", "# $ ### $ #", "#   @     #", "#         #", "###########"],
-  ["###########", "# .  #    #", "# $  # $ .#", "#    @    #", "#         #", "###########"],
-  ["############", "# .   #   .#", "# $   # $  #", "#     @    #", "#          #", "############"]
+﻿const CARDS = [
+  { id: 'ember', name: 'Угольный огонёк', rarity: 'common', icon: '◆', color: '#6d82ad' },
+  { id: 'moss', name: 'Лесной мох', rarity: 'common', icon: '❈', color: '#558d7d' },
+  { id: 'shell', name: 'Раковина прилива', rarity: 'common', icon: '◒', color: '#697eaa' },
+  { id: 'quartz', name: 'Белый кварц', rarity: 'common', icon: '◇', color: '#8294b7' },
+  { id: 'feather', name: 'Синее перо', rarity: 'common', icon: '⌁', color: '#4d83a6' },
+  { id: 'coin', name: 'Старая монета', rarity: 'common', icon: '◉', color: '#a17c4e' },
+  { id: 'moon', name: 'Лунный камень', rarity: 'rare', icon: '☾', color: '#6874d9' },
+  { id: 'rose', name: 'Роза странника', rarity: 'rare', icon: '✿', color: '#b95778' },
+  { id: 'compass', name: 'Звёздный компас', rarity: 'rare', icon: '✥', color: '#528fa9' },
+  { id: 'lantern', name: 'Фонарь глубин', rarity: 'rare', icon: '♢', color: '#c18a4a' },
+  { id: 'crown', name: 'Корона волн', rarity: 'rare', icon: '♔', color: '#6583cf' },
+  { id: 'mask', name: 'Маска ветра', rarity: 'rare', icon: '◈', color: '#986ab7' },
+  { id: 'dragon', name: 'Драконий глаз', rarity: 'epic', icon: '◉', color: '#d25d62' },
+  { id: 'meteor', name: 'Осколок метеора', rarity: 'epic', icon: '☄', color: '#dc7b4e' },
+  { id: 'oracle', name: 'Кристалл оракула', rarity: 'epic', icon: '✧', color: '#9b6dd1' },
+  { id: 'storm', name: 'Сердце грозы', rarity: 'epic', icon: 'ϟ', color: '#557bd1' },
+  { id: 'phoenix', name: 'Перо феникса', rarity: 'epic', icon: '♨', color: '#d36a3c' },
+  { id: 'void', name: 'Осколок пустоты', rarity: 'epic', icon: '✹', color: '#7059b2' },
+  { id: 'atlas', name: 'Атлас миров', rarity: 'legendary', icon: '✺', color: '#d5a94d' },
+  { id: 'star', name: 'Падшая звезда', rarity: 'legendary', icon: '★', color: '#e9c45e' },
+  { id: 'crownfire', name: 'Корона пламени', rarity: 'legendary', icon: '♛', color: '#df654b' },
+  { id: 'leviathan', name: 'Знак левиафана', rarity: 'legendary', icon: '♒', color: '#55b9b0' },
+  { id: 'time', name: 'Часы вечности', rarity: 'legendary', icon: '◷', color: '#cf76ca' },
+  { id: 'origin', name: 'Искра истока', rarity: 'legendary', icon: '✦', color: '#f0d878' }
 ];
-
-// Для Google-входа создай бесплатный проект Firebase и вставь сюда его web-конфигурацию.
-// Пока поля пустые, игра работает без регистрации и хранит прогресс в браузере.
+const RARITY = { common: { label: 'Обычная', chance: 58 }, rare: { label: 'Редкая', chance: 27 }, epic: { label: 'Эпическая', chance: 12 }, legendary: { label: 'Легенда', chance: 3 } };
 const FIREBASE_CONFIG = { apiKey: '', authDomain: '', projectId: '', storageBucket: '', messagingSenderId: '', appId: '' };
-const board = document.querySelector('#board');
-const levelLabel = document.querySelector('#levelLabel');
-const movesLabel = document.querySelector('#movesLabel');
-const progressBar = document.querySelector('#progressBar');
-const hint = document.querySelector('#hint');
-const winDialog = document.querySelector('#winDialog');
-const winMoves = document.querySelector('#winMoves');
-const nextButton = document.querySelector('#nextButton');
-const previousButton = document.querySelector('#previousButton');
-const authButton = document.querySelector('#authButton');
-const authStatus = document.querySelector('#authStatus');
-const mineBoard = document.querySelector('#mineBoard');
-const minesLeft = document.querySelector('#minesLeft');
-const minesMessage = document.querySelector('#minesMessage');
-const flagModeButton = document.querySelector('#flagModeButton');
-const stateKey = 'kletki-progress';
-
-function readProgress() {
-  try {
-    const current = JSON.parse(localStorage.getItem(stateKey) || '{}');
-    const oldCompleted = Number(localStorage.getItem('kletki-sokoban-progress') || 0);
-    return { completed: Math.max(0, Math.min(LEVELS.length, Number(current.completed || oldCompleted))), bestMoves: current.bestMoves || {}, minesWins: Number(current.minesWins || 0) };
-  } catch (_) { return { completed: 0, bestMoves: {}, minesWins: 0 }; }
-}
-
-let progress = readProgress();
-let completed = progress.completed;
-let levelIndex = 0;
-let state;
-let currentUser = null;
+const $ = selector => document.querySelector(selector);
+const stateKey = 'artefacts-collection-v1';
+let game = loadGame();
 let cloudDb = null;
 let firebaseAuth = null;
+let currentUser = null;
+let cloudSaveTimer = null;
 
-function persistProgress() { localStorage.setItem(stateKey, JSON.stringify(progress)); saveCloudProgress(); }
-
-async function saveCloudProgress() {
-  if (!cloudDb || !currentUser) return;
+function loadGame() {
   try {
-    await cloudDb.collection('users').doc(currentUser.uid).set({ completed: progress.completed, bestMoves: progress.bestMoves, minesWins: progress.minesWins, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
-  } catch (_) { authStatus.textContent = 'Вход выполнен, но синхронизация пока недоступна'; }
+    const saved = JSON.parse(localStorage.getItem(stateKey) || '{}');
+    return { coins: Number.isFinite(saved.coins) ? saved.coins : 100, cards: saved.cards || {}, opens: Number(saved.opens || 0), duplicates: Number(saved.duplicates || 0), lastFree: saved.lastFree || '' };
+  } catch (_) { return { coins: 100, cards: {}, opens: 0, duplicates: 0, lastFree: '' }; }
 }
-
-function mergeProgress(remote) {
-  if (!remote) return;
-  progress.completed = Math.max(progress.completed, Number(remote.completed || 0));
-  progress.minesWins = Math.max(progress.minesWins, Number(remote.minesWins || 0));
-  Object.entries(remote.bestMoves || {}).forEach(([level, moves]) => {
-    const old = Number(progress.bestMoves[level] || 0);
-    if (!old || Number(moves) < old) progress.bestMoves[level] = Number(moves);
-  });
-  completed = progress.completed;
-  localStorage.setItem(stateKey, JSON.stringify(progress));
+function persist() {
+  localStorage.setItem(stateKey, JSON.stringify(game));
+  clearTimeout(cloudSaveTimer);
+  cloudSaveTimer = setTimeout(saveCloud, 150);
 }
-
-async function loadCloudProgress() {
+async function saveCloud() {
   if (!cloudDb || !currentUser) return;
-  try {
-    const snapshot = await cloudDb.collection('users').doc(currentUser.uid).get();
-    mergeProgress(snapshot.exists ? snapshot.data() : null);
-    renderProgress();
-    await saveCloudProgress();
-  } catch (_) { authStatus.textContent = 'Вход выполнен, прогресс пока только на этом устройстве'; }
+  try { await cloudDb.collection('users').doc(currentUser.uid).set({ collection: game, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }); } catch (_) { $('#authStatus').textContent = 'Вход выполнен, но синхронизация пока недоступна'; }
 }
-
-function parseLevel(lines) {
-  const width = Math.max(...lines.map(line => line.length));
-  const cells = [];
-  let player = null;
-  for (let row = 0; row < lines.length; row += 1) {
-    for (let col = 0; col < width; col += 1) {
-      const char = lines[row][col] || '#';
-      const cell = { row, col, wall: char === '#', goal: '.+*'.includes(char), box: '$*'.includes(char) };
-      if ('@+'.includes(char)) player = { row, col };
-      cells.push(cell);
-    }
-  }
-  return { width, height: lines.length, cells, player, moves: 0 };
+function mergeCloud(data) {
+  if (!data || !data.collection) return;
+  const remote = data.collection;
+  game.coins = Math.max(game.coins, Number(remote.coins || 0));
+  game.opens = Math.max(game.opens, Number(remote.opens || 0));
+  game.duplicates = Math.max(game.duplicates, Number(remote.duplicates || 0));
+  Object.entries(remote.cards || {}).forEach(([id, count]) => { game.cards[id] = Math.max(Number(game.cards[id] || 0), Number(count || 0)); });
+  localStorage.setItem(stateKey, JSON.stringify(game));
 }
-function cellAt(row, col) { return state.cells.find(cell => cell.row === row && cell.col === col); }
-function loadLevel(index) { levelIndex = Math.max(0, Math.min(LEVELS.length - 1, index)); state = parseLevel(LEVELS[levelIndex]); winDialog.hidden = true; render(); }
-
-function move(direction) {
-  const deltas = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] };
-  const [dr, dc] = deltas[direction] || [];
-  if (dr === undefined || winDialog.hidden === false) return;
-  const next = cellAt(state.player.row + dr, state.player.col + dc);
-  if (!next || next.wall) return;
-  if (next.box) {
-    const beyond = cellAt(next.row + dr, next.col + dc);
-    if (!beyond || beyond.wall || beyond.box) return;
-    next.box = false;
-    beyond.box = true;
-  }
-  state.player = { row: next.row, col: next.col };
-  state.moves += 1;
-  render();
-  if (state.cells.filter(cell => cell.goal).every(cell => cell.box)) finishLevel();
+function rarityPick() {
+  const roll = Math.random() * 100;
+  let total = 0;
+  for (const rarity of ['common', 'rare', 'epic', 'legendary']) { total += RARITY[rarity].chance; if (roll < total) return rarity; }
+  return 'common';
 }
-
-function finishLevel() {
-  if (levelIndex === completed) { completed = Math.min(LEVELS.length, completed + 1); progress.completed = completed; }
-  const scoreKey = String(levelIndex + 1);
-  const oldBest = Number(progress.bestMoves[scoreKey] || 0);
-  if (!oldBest || state.moves < oldBest) progress.bestMoves[scoreKey] = state.moves;
-  persistProgress();
-  winMoves.textContent = state.moves;
-  winDialog.hidden = false;
-  renderProgress();
+function chooseCard() {
+  const rarity = rarityPick();
+  const pool = CARDS.filter(card => card.rarity === rarity);
+  return pool[Math.floor(Math.random() * pool.length)];
 }
-
-function renderProgress() {
-  levelLabel.textContent = `${levelIndex + 1} / ${LEVELS.length}`;
-  movesLabel.textContent = state.moves;
-  progressBar.style.width = `${((levelIndex + 1) / LEVELS.length) * 100}%`;
-  previousButton.disabled = levelIndex === 0;
-  nextButton.disabled = levelIndex >= completed || levelIndex === LEVELS.length - 1;
+function today() { return new Date().toISOString().slice(0, 10); }
+function freeCaseAvailable() { return game.lastFree !== today(); }
+function renderStats() {
+  const owned = CARDS.filter(card => game.cards[card.id]).length;
+  $('#collectionCount').textContent = `${owned} / ${CARDS.length}`;
+  $('#collectionBar').style.width = `${owned / CARDS.length * 100}%`;
+  $('#coinsLabel').textContent = game.coins;
+  $('#duplicateLabel').textContent = `Дубликаты: ${game.duplicates}`;
+  const free = freeCaseAvailable();
+  $('#openCaseButton').innerHTML = free ? 'Открыть бесплатный кейс <span class="button-cost">◆ 0</span>' : 'Открыть кейс <span class="button-cost">◆ 20</span>';
+  $('#caseHint').textContent = free ? 'Бесплатный кейс доступен сегодня' : 'Следующий бесплатный кейс — завтра';
 }
-function render() {
-  board.style.gridTemplateColumns = `repeat(${state.width}, 1fr)`;
-  board.innerHTML = '';
-  state.cells.forEach(cell => {
-    const tile = document.createElement('div');
-    tile.className = `tile ${cell.wall ? 'wall' : 'floor'}${cell.goal ? ' goal' : ''}${cell.box ? ' box' : ''}`;
-    if (cell.box && cell.goal) tile.classList.add('box-on-goal');
-    if (state.player.row === cell.row && state.player.col === cell.col) tile.classList.add('player');
-    tile.setAttribute('role', 'gridcell');
-    board.appendChild(tile);
-  });
-  hint.textContent = completed > levelIndex ? 'Уровень уже пройден — можешь улучшить результат' : 'Передвинь все ящики на светящиеся клетки';
-  renderProgress();
+function cardMarkup(card, count) {
+  return `<article class="collect-card rarity-${card.rarity} ${count ? '' : 'locked'}" style="--card-color:${card.color}"><div class="card-shine"></div><div class="card-icon">${count ? card.icon : '?'}</div><div class="card-info"><strong>${count ? card.name : 'Неизвестный артефакт'}</strong><span>${RARITY[card.rarity].label}${count ? ` · ×${count}` : ''}</span></div></article>`;
 }
-
-document.querySelectorAll('[data-direction]').forEach(button => button.addEventListener('click', () => move(button.dataset.direction)));
-document.querySelector('#resetButton').addEventListener('click', () => loadLevel(levelIndex));
-previousButton.addEventListener('click', () => loadLevel(levelIndex - 1));
-nextButton.addEventListener('click', () => { if (levelIndex < completed) loadLevel(levelIndex + 1); });
-document.querySelector('#continueButton').addEventListener('click', () => { winDialog.hidden = true; if (levelIndex < LEVELS.length - 1) loadLevel(levelIndex + 1); else render(); });
-document.addEventListener('keydown', event => {
-  const keys = { ArrowUp: 'up', w: 'up', ArrowDown: 'down', s: 'down', ArrowLeft: 'left', a: 'left', ArrowRight: 'right', d: 'right' };
-  if (keys[event.key]) { event.preventDefault(); move(keys[event.key]); }
-});
-let touchStart = null;
-board.addEventListener('touchstart', event => { touchStart = event.changedTouches[0]; }, { passive: true });
-board.addEventListener('touchend', event => {
-  if (!touchStart) return;
-  const touch = event.changedTouches[0];
-  const dx = touch.clientX - touchStart.clientX;
-  const dy = touch.clientY - touchStart.clientY;
-  touchStart = null;
-  if (Math.max(Math.abs(dx), Math.abs(dy)) < 20) return;
-  move(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'));
-}, { passive: true });
-
-// Сапёр
-let mineState = { size: 8, mineCount: 10, cells: [], gameOver: false, flagMode: false };
-function mineCellAt(row, col) { if (row < 0 || col < 0 || row >= mineState.size || col >= mineState.size) return null; return mineState.cells[row * mineState.size + col]; }
-function mineNeighbours(cell) {
-  const result = [];
-  for (let row = cell.row - 1; row <= cell.row + 1; row += 1) for (let col = cell.col - 1; col <= cell.col + 1; col += 1) { const neighbour = mineCellAt(row, col); if (neighbour && neighbour !== cell) result.push(neighbour); }
-  return result;
+function renderCollection(filter = 'all') {
+  const cards = CARDS.filter(card => filter === 'all' || card.rarity === filter);
+  $('#collectionGrid').innerHTML = cards.map(card => cardMarkup(card, Number(game.cards[card.id] || 0))).join('');
 }
-function newMinesGame() {
-  const total = mineState.size * mineState.size;
-  mineState.cells = Array.from({ length: total }, (_, index) => ({ index, row: Math.floor(index / mineState.size), col: index % mineState.size, mine: false, open: false, flagged: false, adjacent: 0 }));
-  [...mineState.cells].sort(() => Math.random() - 0.5).slice(0, mineState.mineCount).forEach(cell => { cell.mine = true; });
-  mineState.cells.forEach(cell => { cell.adjacent = mineNeighbours(cell).filter(item => item.mine).length; });
-  mineState.gameOver = false;
-  minesMessage.textContent = 'Открой безопасные клетки';
-  renderMines();
+function showToast(message) { const toast = $('#toast'); toast.textContent = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2500); }
+function reveal(card, isDuplicate) {
+  $('#revealedCard').innerHTML = `<div class="big-card rarity-${card.rarity}" style="--card-color:${card.color}"><div class="big-card-top"><span>${RARITY[card.rarity].label}</span><b>${card.icon}</b></div><div class="big-card-symbol">${card.icon}</div><h3>${card.name}</h3><p>Артефакт исследователя</p></div><p class="reveal-note">${isDuplicate ? 'Дубликат добавлен в счётчик коллекции' : 'Новая карта добавлена в коллекцию!'}</p>`;
+  $('#revealPanel').hidden = false;
+  $('#revealPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
-function toggleMineFlag(index) { const cell = mineState.cells[index]; if (!cell || cell.open || mineState.gameOver) return; cell.flagged = !cell.flagged; renderMines(); }
-function revealMine(index) {
-  const first = mineState.cells[index];
-  if (!first || first.open || first.flagged || mineState.gameOver) return;
-  if (first.mine) { mineState.gameOver = true; mineState.cells.forEach(cell => { if (cell.mine) cell.open = true; }); minesMessage.textContent = 'Мина! Нажми «Новая игра»'; renderMines(); return; }
-  const queue = [first];
-  while (queue.length) { const cell = queue.shift(); if (cell.open || cell.flagged) continue; cell.open = true; if (cell.adjacent === 0) mineNeighbours(cell).forEach(neighbour => { if (!neighbour.mine && !neighbour.open) queue.push(neighbour); }); }
-  if (mineState.cells.filter(cell => !cell.mine).every(cell => cell.open)) { mineState.gameOver = true; progress.minesWins += 1; persistProgress(); minesMessage.textContent = `Победа! Всего побед: ${progress.minesWins}`; }
-  renderMines();
+function openCase() {
+  const free = freeCaseAvailable();
+  if (!free && game.coins < 20) { showToast('Недостаточно кристаллов'); return; }
+  if (free) game.lastFree = today(); else game.coins -= 20;
+  const card = chooseCard();
+  const duplicate = Boolean(game.cards[card.id]);
+  game.cards[card.id] = Number(game.cards[card.id] || 0) + 1;
+  game.opens += 1;
+  if (duplicate) { game.duplicates += 1; game.coins += 5; }
+  persist();
+  renderStats(); renderCollection($('.rarity-tab.active').dataset.filter); reveal(card, duplicate);
 }
-function renderMines() {
-  mineBoard.style.gridTemplateColumns = `repeat(${mineState.size}, 1fr)`;
-  mineBoard.innerHTML = '';
-  mineState.cells.forEach(cell => {
-    const button = document.createElement('button');
-    button.type = 'button'; button.className = 'mine-cell';
-    if (cell.open) button.classList.add('open');
-    if (cell.flagged) button.classList.add('flagged');
-    if (cell.open && cell.mine) { button.classList.add('mine'); button.textContent = '✹'; }
-    else if (cell.flagged) button.textContent = '⚑';
-    else if (cell.open && cell.adjacent) { button.classList.add(`number-${Math.min(cell.adjacent, 3)}`); button.textContent = cell.adjacent; }
-    button.addEventListener('click', () => mineState.flagMode ? toggleMineFlag(cell.index) : revealMine(cell.index));
-    button.addEventListener('contextmenu', event => { event.preventDefault(); toggleMineFlag(cell.index); });
-    mineBoard.appendChild(button);
-  });
-  minesLeft.textContent = mineState.mineCount - mineState.cells.filter(cell => cell.flagged).length;
-  flagModeButton.textContent = `🚩 Режим флажков: ${mineState.flagMode ? 'вкл.' : 'выкл.'}`;
-}
-document.querySelector('#newMinesButton').addEventListener('click', newMinesGame);
-flagModeButton.addEventListener('click', () => { mineState.flagMode = !mineState.flagMode; renderMines(); });
-
-function switchGame(name) {
-  const sokoban = name === 'sokoban';
-  document.querySelector('#sokobanGame').hidden = !sokoban;
-  document.querySelector('#minesGame').hidden = sokoban;
-  document.querySelector('#sokobanTab').classList.toggle('active', sokoban);
-  document.querySelector('#minesTab').classList.toggle('active', !sokoban);
-}
-document.querySelector('#sokobanTab').addEventListener('click', () => switchGame('sokoban'));
-document.querySelector('#minesTab').addEventListener('click', () => switchGame('mines'));
-
 function setupFirebase() {
-  const configured = FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.authDomain && FIREBASE_CONFIG.projectId && window.firebase;
-  if (!configured) { authButton.addEventListener('click', () => { authStatus.textContent = 'Google-вход подключается через Firebase — см. инструкцию'; }); return; }
+  const ready = FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.authDomain && FIREBASE_CONFIG.projectId && window.firebase;
+  if (!ready) { $('#authButton').addEventListener('click', () => { $('#authStatus').textContent = 'Google-вход подключается через Firebase — добавь конфигурацию в app.js'; }); return; }
   try {
-    firebase.initializeApp(FIREBASE_CONFIG);
-    firebaseAuth = firebase.auth();
-    cloudDb = firebase.firestore();
-    firebaseAuth.onAuthStateChanged(async user => {
-      currentUser = user;
-      if (user) { authButton.textContent = 'Выйти'; authStatus.textContent = `${user.displayName || user.email} · синхронизация включена`; await loadCloudProgress(); }
-      else { authButton.textContent = 'Войти'; authStatus.textContent = 'Прогресс сохраняется на этом устройстве'; }
-    });
-    authButton.addEventListener('click', async () => {
-      try { if (currentUser) await firebaseAuth.signOut(); else await firebaseAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); }
-      catch (_) { authStatus.textContent = 'Не удалось выполнить вход Google'; }
-    });
-  } catch (_) { authStatus.textContent = 'Firebase настроен с ошибкой — локальное сохранение работает'; }
+    firebase.initializeApp(FIREBASE_CONFIG); firebaseAuth = firebase.auth(); cloudDb = firebase.firestore();
+    firebaseAuth.onAuthStateChanged(async user => { currentUser = user; if (user) { $('#authButton').textContent = 'Выйти'; $('#authStatus').textContent = `${user.displayName || user.email} · синхронизация включена`; const snapshot = await cloudDb.collection('users').doc(user.uid).get(); mergeCloud(snapshot.exists ? snapshot.data() : null); renderStats(); renderCollection(); await saveCloud(); } else { $('#authButton').textContent = 'Войти'; $('#authStatus').textContent = 'Прогресс сохраняется на этом устройстве'; } });
+    $('#authButton').addEventListener('click', async () => { try { if (currentUser) await firebaseAuth.signOut(); else await firebaseAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); } catch (_) { $('#authStatus').textContent = 'Не удалось выполнить вход Google'; } });
+  } catch (_) { $('#authStatus').textContent = 'Firebase настроен с ошибкой — локальное сохранение работает'; }
 }
 
-loadLevel(0);
-newMinesGame();
-setupFirebase();
+$('#openCaseButton').addEventListener('click', openCase);
+$('#closeRevealButton').addEventListener('click', () => { $('#revealPanel').hidden = true; });
+$('.rarity-tabs').addEventListener('click', event => { const button = event.target.closest('.rarity-tab'); if (!button) return; document.querySelectorAll('.rarity-tab').forEach(tab => tab.classList.remove('active')); button.classList.add('active'); renderCollection(button.dataset.filter); });
+renderStats(); renderCollection(); setupFirebase();
 if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));

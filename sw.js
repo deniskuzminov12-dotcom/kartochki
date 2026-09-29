@@ -1,4 +1,4 @@
-const CACHE = 'kletki-v2';
+const CACHE = 'artefacts-v4';
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(['./', './index.html', './style.css', './app.js', './manifest.json', './icon.svg'])));
 });

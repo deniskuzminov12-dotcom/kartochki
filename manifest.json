@@ -1,10 +1,10 @@
 {
-  "name": "Клетки — Сокобан",
-  "short_name": "Клетки",
+  "name": "Артефакты — карточная коллекция",
+  "short_name": "Артефакты",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#101827",
   "theme_color": "#101827",
   "lang": "ru",
-  "description": "Мобильная головоломка с уровнями"
+  "description": "Коллекционируй артефакты, открывая кейсы"
 }
