@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#101827">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -20,7 +20,7 @@
     </header>
     <p id="authStatus" class="auth-status">Прогресс сохраняется на этом устройстве</p>
     <section class="stats-card">
-      <div><span class="muted">Собрано</span><strong id="collectionCount">0 / 24</strong></div>
+      <div><span class="muted">Собрано</span><strong id="collectionCount">0 / 48</strong></div>
       <div class="collection-track"><span id="collectionBar"></span></div>
       <div class="coins"><span class="coin">◆</span><strong id="coinsLabel">100</strong></div>
     </section>
@@ -29,6 +29,9 @@
       <button class="case-choice active" data-case="aurora" type="button"><span class="case-choice-icon">❄</span><span><b>Северное сияние</b><small>Холодные реликвии</small></span></button>
       <button class="case-choice" data-case="inferno" type="button"><span class="case-choice-icon">♨</span><span><b>Адский сундук</b><small>Огненные артефакты</small></span></button>
       <button class="case-choice" data-case="abyss" type="button"><span class="case-choice-icon">◈</span><span><b>Бездна</b><small>Тайны глубин</small></span></button>
+      <button class="case-choice" data-case="cyber" type="button"><span class="case-choice-icon">⌁</span><span><b>Кибер-узел</b><small>Неоновые схемы</small></span></button>
+      <button class="case-choice" data-case="jungle" type="button"><span class="case-choice-icon">❈</span><span><b>Изумрудная чаща</b><small>Дикая коллекция</small></span></button>
+      <button class="case-choice" data-case="solar" type="button"><span class="case-choice-icon">☼</span><span><b>Солнечный храм</b><small>Золотые реликвии</small></span></button>
     </section>
     <section class="case-panel">
       <div class="case-art"><span>✦</span></div>
@@ -36,13 +39,13 @@
     </section>
     <section id="roulettePanel" class="roulette-panel" hidden><div class="roulette-marker"></div><div class="roulette-window"><div id="rouletteTrack" class="roulette-track"></div></div><p id="rouletteStatus">Кейс открывается...</p></section>
     <section id="revealPanel" class="reveal-panel" hidden><p class="eyebrow">ТВОЯ НАХОДКА</p><div id="revealedCard" class="revealed-card"></div><button id="closeRevealButton" class="small-button" type="button">В коллекцию</button></section>
-    <section id="profilePanel" class="profile-panel" hidden>
+    <dialog id="profilePanel" class="profile-backdrop" aria-label="Профиль игрока"><section class="profile-panel">
       <div class="profile-heading"><div class="avatar" id="profileAvatar">А</div><div><p class="eyebrow">ТВОЙ ПРОФИЛЬ</p><h2 id="profileName">Исследователь</h2></div><button id="closeProfileButton" class="small-button" type="button">Закрыть</button></div>
       <div class="profile-edit"><input id="profileNameInput" maxlength="24" placeholder="Имя игрока" aria-label="Имя игрока"><button id="saveNameButton" class="small-button" type="button">Сохранить имя</button></div>
-      <div class="profile-stats"><div><strong id="profileOpens">0</strong><span>Открытий</span></div><div><strong id="profileOwned">0 / 24</strong><span>Карт собрано</span></div><div><strong id="profileCoins">100</strong><span>Кристаллов</span></div></div>
+      <div class="profile-stats"><div><strong id="profileOpens">0</strong><span>Открытий</span></div><div><strong id="profileOwned">0 / 48</strong><span>Карт собрано</span></div><div><strong id="profileCoins">100</strong><span>Кристаллов</span></div></div>
       <div class="odds-box"><p class="eyebrow">Шансы в каждом кейсе</p><div class="odds-row"><span class="dot common-dot"></span>Обычная <b>58%</b><em>Продажа ◆ 8</em></div><div class="odds-row"><span class="dot rare-dot"></span>Редкая <b>27%</b><em>Продажа ◆ 18</em></div><div class="odds-row"><span class="dot epic-dot"></span>Эпическая <b>12%</b><em>Продажа ◆ 45</em></div><div class="odds-row"><span class="dot legendary-dot"></span>Легенда <b>3%</b><em>Продажа ◆ 120</em></div></div>
       <div class="sell-section"><p class="eyebrow">ПРОДАЖА КАРТОЧЕК</p><p class="sell-help">Продавай дубликаты за кристаллы. Оставь хотя бы одну копию каждой найденной карты.</p><div id="sellGrid" class="sell-grid"></div></div>
-    </section>
+    </section></dialog>
     <section class="collection-section"><div class="section-heading"><div><p class="eyebrow">ТВОИ КАРТЫ</p><h2>Коллекция</h2></div><span id="duplicateLabel" class="duplicate-label">Дубликаты: 0</span></div><div class="rarity-tabs" role="tablist"><button class="rarity-tab active" data-filter="all" type="button">Все</button><button class="rarity-tab" data-filter="common" type="button">Обычные</button><button class="rarity-tab" data-filter="rare" type="button">Редкие</button><button class="rarity-tab" data-filter="epic" type="button">Эпические</button><button class="rarity-tab" data-filter="legendary" type="button">Легенды</button></div><div id="collectionGrid" class="collection-grid"></div></section>
   </main>
   <div id="toast" class="toast" role="status"></div>

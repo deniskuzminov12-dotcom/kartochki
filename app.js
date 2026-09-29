@@ -23,13 +23,40 @@
   { id: 'leviathan', name: 'Знак левиафана', rarity: 'legendary', icon: '♒', color: '#55b9b0' },
   { id: 'time', name: 'Часы вечности', rarity: 'legendary', icon: '◷', color: '#cf76ca' },
   { id: 'origin', name: 'Искра истока', rarity: 'legendary', icon: '✦', color: '#f0d878' }
+  ,{ id: 'circuit', name: 'Живой контур', rarity: 'common', icon: '⌁', color: '#27b8cb' }
+  ,{ id: 'pixel', name: 'Пиксельный ключ', rarity: 'common', icon: '▦', color: '#5279dc' }
+  ,{ id: 'neonheart', name: 'Неоновое сердце', rarity: 'rare', icon: '♡', color: '#ec62d7' }
+  ,{ id: 'datashard', name: 'Фрагмент данных', rarity: 'rare', icon: '◈', color: '#4fdfed' }
+  ,{ id: 'hacker', name: 'Маска хакера', rarity: 'epic', icon: '⌬', color: '#9475ff' }
+  ,{ id: 'quantum', name: 'Квантовый узел', rarity: 'epic', icon: '✣', color: '#55e5bd' }
+  ,{ id: 'singularity', name: 'Сингулярность', rarity: 'legendary', icon: '⦿', color: '#f45ed1' }
+  ,{ id: 'neoncore', name: 'Ядро мегаполиса', rarity: 'legendary', icon: '✹', color: '#64e7ff' }
+  ,{ id: 'fern', name: 'Серебряный папоротник', rarity: 'common', icon: '❧', color: '#4ea96c' }
+  ,{ id: 'berry', name: 'Лунная ягода', rarity: 'common', icon: '●', color: '#ae65a9' }
+  ,{ id: 'totem', name: 'Костяной тотем', rarity: 'rare', icon: '♧', color: '#8c9b54' }
+  ,{ id: 'spirit', name: 'Дух чащи', rarity: 'rare', icon: '♢', color: '#56c895' }
+  ,{ id: 'ent', name: 'Сердце энта', rarity: 'epic', icon: '♜', color: '#6eaa58' }
+  ,{ id: 'venom', name: 'Яд древней лозы', rarity: 'epic', icon: '☠', color: '#ba75d3' }
+  ,{ id: 'worldtree', name: 'Мировое древо', rarity: 'legendary', icon: '♧', color: '#72d66d' }
+  ,{ id: 'greenmoon', name: 'Зелёная луна', rarity: 'legendary', icon: '☽', color: '#b0ec76' }
+  ,{ id: 'sand', name: 'Золотой песок', rarity: 'common', icon: '▪', color: '#c19b4c' }
+  ,{ id: 'scarab', name: 'Солнечный скарабей', rarity: 'common', icon: '✥', color: '#bd7d39' }
+  ,{ id: 'sphinx', name: 'Око сфинкса', rarity: 'rare', icon: '◉', color: '#e5a43e' }
+  ,{ id: 'sunray', name: 'Луч рассвета', rarity: 'rare', icon: '☼', color: '#e9d160' }
+  ,{ id: 'pharaoh', name: 'Печать фараона', rarity: 'epic', icon: '♕', color: '#d98b42' }
+  ,{ id: 'solarwing', name: 'Крыло солнца', rarity: 'epic', icon: '✧', color: '#f1c85b' }
+  ,{ id: 'ra', name: 'Глаз Ра', rarity: 'legendary', icon: '𓂀', color: '#f1b54f' }
+  ,{ id: 'goldenage', name: 'Золотой век', rarity: 'legendary', icon: '✺', color: '#ffe07c' }
 ];
 const RARITY = { common: { label: 'Обычная', chance: 58 }, rare: { label: 'Редкая', chance: 27 }, epic: { label: 'Эпическая', chance: 12 }, legendary: { label: 'Легенда', chance: 3 } };
 const SELL_PRICE = { common: 8, rare: 18, epic: 45, legendary: 120 };
 const CASES = {
-  aurora: { title: 'Северное сияние', description: 'Ледяные реликвии из забытых северных храмов.', icon: '❄', cards: ['quartz', 'feather', 'moon', 'compass', 'crown', 'oracle', 'star', 'time'] },
+  aurora: { title: 'Северное сияние', description: 'Ледяные реликвии из забытых северных храмов.', icon: '❄', cards: ['quartz', 'feather', 'moon', 'compass', 'crown', 'oracle', 'star', 'time', 'atlas'] },
   inferno: { title: 'Адский сундук', description: 'Огненные артефакты, закалённые в пламени.', icon: '♨', cards: ['ember', 'coin', 'rose', 'lantern', 'dragon', 'meteor', 'phoenix', 'crownfire'] },
-  abyss: { title: 'Бездна', description: 'Тайны глубин и вещи, которым лучше не видеть свет.', icon: '◈', cards: ['moss', 'shell', 'mask', 'crown', 'storm', 'void', 'leviathan', 'origin'] }
+  abyss: { title: 'Бездна', description: 'Тайны глубин и вещи, которым лучше не видеть свет.', icon: '◈', cards: ['moss', 'shell', 'mask', 'crown', 'storm', 'void', 'leviathan', 'origin'] },
+  cyber: { title: 'Кибер-узел', description: 'Неоновые схемы из города, который никогда не спит.', icon: '⌁', cards: ['circuit', 'pixel', 'neonheart', 'datashard', 'hacker', 'quantum', 'singularity', 'neoncore'] },
+  jungle: { title: 'Изумрудная чаща', description: 'Дикая коллекция, спрятанная среди древних лиан.', icon: '❈', cards: ['fern', 'berry', 'totem', 'spirit', 'ent', 'venom', 'worldtree', 'greenmoon'] },
+  solar: { title: 'Солнечный храм', description: 'Золотые реликвии древнего храма под палящим солнцем.', icon: '☼', cards: ['sand', 'scarab', 'sphinx', 'sunray', 'pharaoh', 'solarwing', 'ra', 'goldenage'] }
 };
 const FIREBASE_CONFIG = { apiKey: '', authDomain: '', projectId: '', storageBucket: '', messagingSenderId: '', appId: '' };
 const $ = selector => document.querySelector(selector);
@@ -98,7 +125,7 @@ function renderProfile() {
   const owned = CARDS.filter(card => game.cards[card.id]).length;
   $('#profileName').textContent = game.name || 'Исследователь';
   $('#profileAvatar').textContent = (game.name || 'И').trim().charAt(0).toUpperCase();
-  $('#profileNameInput').value = game.name || 'Исследователь';
+  if (document.activeElement !== $('#profileNameInput')) $('#profileNameInput').value = game.name || 'Исследователь';
   $('#profileOpens').textContent = game.opens;
   $('#profileOwned').textContent = `${owned} / ${CARDS.length}`;
   $('#profileCoins').textContent = game.coins;
@@ -119,7 +146,8 @@ function renderCase() {
   document.querySelectorAll('.case-choice').forEach(button => button.classList.toggle('active', button.dataset.case === selectedCase));
 }
 function cardMarkup(card, count) {
-  return `<article class="collect-card rarity-${card.rarity} ${count ? '' : 'locked'}" style="--card-color:${card.color}"><div class="card-shine"></div><div class="card-icon">${count ? card.icon : '?'}</div><div class="card-info"><strong>${count ? card.name : 'Неизвестный артефакт'}</strong><span>${RARITY[card.rarity].label}${count ? ` · ×${count}` : ''}</span></div></article>`;
+  const origin = Object.values(CASES).filter(item => item.cards.includes(card.id)).map(item => item.title).join(' / ');
+  return `<article class="collect-card rarity-${card.rarity} ${count ? '' : 'locked'}" style="--card-color:${card.color}"><div class="card-shine"></div><div class="card-icon">${count ? card.icon : '?'}</div><div class="card-info"><strong>${count ? card.name : 'Неизвестный артефакт'}</strong><span>${RARITY[card.rarity].label}${count ? ` · ×${count}` : ''}</span><span class="card-origin">${origin}</span></div></article>`;
 }
 function renderCollection(filter = 'all') {
   const cards = CARDS.filter(card => filter === 'all' || card.rarity === filter);
@@ -129,7 +157,8 @@ function showToast(message) { const toast = $('#toast'); toast.textContent = mes
 function addCrystalFromTap() {
   game.coins = Math.round((game.coins + 0.1) * 10) / 10;
   persist();
-  renderStats();
+  $('#coinsLabel').textContent = game.coins;
+  $('#profileCoins').textContent = game.coins;
   const float = document.createElement('span');
   float.className = 'crystal-float';
   float.textContent = '+0,1 ◆';
@@ -139,7 +168,7 @@ function addCrystalFromTap() {
 function reveal(card, isDuplicate) {
   $('#revealedCard').innerHTML = `<div class="big-card rarity-${card.rarity}" style="--card-color:${card.color}"><div class="big-card-top"><span>${RARITY[card.rarity].label}</span><b>${card.icon}</b></div><div class="big-card-symbol">${card.icon}</div><h3>${card.name}</h3><p>Артефакт исследователя</p></div><p class="reveal-note">${isDuplicate ? 'Дубликат добавлен в счётчик коллекции' : 'Новая карта добавлена в коллекцию!'}</p>`;
   $('#revealPanel').hidden = false;
-  $('#revealPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  if (!$('#profilePanel').open) $('#revealPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 function rouletteCardMarkup(card) {
   return `<div class="roulette-item rarity-${card.rarity}" style="--card-color:${card.color}"><span>${card.icon}</span><small>${RARITY[card.rarity].label}</small></div>`;
@@ -203,11 +232,11 @@ $('#openCaseButton').addEventListener('pointerup', event => {
   }
 });
 $('#openCaseButton').addEventListener('click', () => { if (!touchOpenedCase) openCase(); });
-$('#crystalWindow').addEventListener('pointerup', event => {
-  event.preventDefault();
-  addCrystalFromTap();
+$('#crystalWindow').addEventListener('click', addCrystalFromTap);
+// manipulation disables double-tap zoom, while preserving pinch and scrolling.
+document.addEventListener('dblclick', event => {
+  if (!event.target.closest('input, textarea')) event.preventDefault();
 });
-$('#crystalWindow').addEventListener('click', event => { if (event.detail === 0) addCrystalFromTap(); });
 $('#closeRevealButton').addEventListener('click', () => { $('#revealPanel').hidden = true; });
 document.querySelector('.case-selector').addEventListener('click', event => {
   const button = event.target.closest('.case-choice');
@@ -215,13 +244,25 @@ document.querySelector('.case-selector').addEventListener('click', event => {
   selectedCase = button.dataset.case;
   renderCase();
 });
-$('#profileButton').addEventListener('click', () => { $('#profilePanel').hidden = false; renderSellGrid(); $('#profilePanel').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
-$('#closeProfileButton').addEventListener('click', () => { $('#profilePanel').hidden = true; });
+$('#profileButton').addEventListener('click', () => {
+  renderProfile(); renderSellGrid();
+  $('#profilePanel').showModal();
+  document.body.classList.add('profile-open');
+  $('.profile-panel').scrollTop = 0;
+  $('#closeProfileButton').focus({ preventScroll: true });
+});
+$('#closeProfileButton').addEventListener('click', () => $('#profilePanel').close());
+$('#profilePanel').addEventListener('click', event => { if (event.target.id === 'profilePanel') event.currentTarget.close(); });
+$('#profilePanel').addEventListener('close', () => {
+  document.body.classList.remove('profile-open');
+  $('#profileButton').focus({ preventScroll: true });
+});
 $('#saveNameButton').addEventListener('click', () => { const value = $('#profileNameInput').value.trim().slice(0, 24); if (!value) { showToast('Введите имя'); return; } game.name = value; persist(); renderProfile(); showToast('Имя сохранено'); });
 $('#sellGrid').addEventListener('click', event => {
   const button = event.target.closest('[data-sell]');
   if (!button) return;
   const card = CARDS.find(item => item.id === button.dataset.sell);
+  if (!card) return;
   const count = Number(game.cards[card.id] || 0);
   if (!card || count < 2) { showToast('Оставь хотя бы одну копию'); return; }
   game.cards[card.id] = count - 1;

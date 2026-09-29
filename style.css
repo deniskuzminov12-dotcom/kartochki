@@ -73,3 +73,26 @@ button { touch-action:manipulation; user-select:none; }
 .crystal-window b,.crystal-window small { position:relative; z-index:1; display:block; } .crystal-window b { font-size:12px; } .crystal-window small { margin-top:3px; color:var(--muted); font-size:10px; } .tap-bonus { position:relative; z-index:1; margin-left:auto; color:var(--cyan); font-size:15px; }
 .crystal-float { position:absolute; z-index:4; right:22px; top:5px; color:var(--gold); font-size:13px; font-weight:850; pointer-events:none; animation:floatCrystal .65s ease-out forwards; }
 @keyframes floatCrystal { from { opacity:1; transform:translateY(0); } to { opacity:0; transform:translateY(-25px); } }
+html,body { touch-action:manipulation; -webkit-text-size-adjust:100%; }
+.profile-backdrop { position:fixed; inset:0; width:100%; height:100%; max-width:none; max-height:none; margin:0; padding:0; border:0; background:var(--bg); color:var(--text); overflow:auto; overscroll-behavior:contain; }
+.profile-backdrop:not([open]) { display:none; }
+.profile-backdrop[open] { display:block; }
+.profile-backdrop::backdrop { background:var(--bg); }
+.profile-backdrop .profile-panel { width:min(100%,650px); min-height:100%; margin:0 auto; border:0; border-radius:0; box-shadow:none; padding:max(18px,env(safe-area-inset-top)) 18px max(24px,env(safe-area-inset-bottom)); }
+body.profile-open { overflow:hidden; }
+.profile-heading > div:nth-child(2) { min-width:0; }
+.profile-heading h2 { overflow-wrap:anywhere; font-size:20px; }
+.profile-edit input { font-size:16px; }
+.card-info .card-origin { font-size:9px; color:var(--muted); white-space:normal; }
+.collect-card.locked { border-bottom:3px solid var(--card-color); }
+:root { --cyan:#6fe7ff; }
+.header-actions { flex-wrap:wrap; justify-content:flex-end; }
+.case-choice > span:last-child { min-width:0; }
+.case-choice b,.case-choice small { white-space:normal; }
+.case-choice { min-height:54px; }
+.case-choice:nth-child(n+4) { margin-top:0; }
+.case-selector { grid-template-columns:repeat(3,1fr); }
+.case-art.theme-cyber { border-color:#64e7ff; background:radial-gradient(circle at 35% 25%,#268b9e,#29316e 52%,#141531); color:#6fe7ff; }
+.case-art.theme-jungle { border-color:#72d66d; background:radial-gradient(circle at 35% 25%,#3e995e,#244b52 52%,#142c2d); color:#b0ec76; }
+.case-art.theme-solar { border-color:#ffe07c; background:radial-gradient(circle at 35% 25%,#d08a3f,#704254 52%,#2f1e35); color:#ffe07c; }
+@media (max-width:430px) { .case-selector { grid-template-columns:repeat(2,1fr); } }
